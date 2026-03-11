@@ -174,14 +174,11 @@ export default function EditProductDrawer({ open, onClose, productId, product })
               ) : (
                 <>
                   {step === 1 && product && (
-                    <div className="text-center py-8">
-                      <p className="text-gray-600">
-                        Product: <strong>{product.name}</strong>
-                      </p>
-                      <p className="text-sm text-gray-500 mt-2">
-                        Edit functionality coming soon
-                      </p>
-                    </div>
+                    <StepBasic 
+                      productId={productId}
+                      product={product}
+                      isEdit={true}
+                    />
                   )}
                   {step === 2 && (
                     <StepGallery ref={galleryRef} productId={productId} />

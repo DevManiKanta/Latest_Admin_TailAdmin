@@ -1,4 +1,5 @@
 import { useRef, useState, forwardRef, useImperativeHandle } from "react";
+import toast from "react-hot-toast";
 import API from "../../../utils/apiInstance";
 
 const StepGallery = forwardRef(({ productId }, ref) => {
@@ -43,7 +44,7 @@ const StepGallery = forwardRef(({ productId }, ref) => {
   useImperativeHandle(ref, () => ({
     async saveStep() {
       if (!productId) {
-        alert("Product not created yet");
+        toast.error("Product not created yet");
         return false;
       }
       try {
@@ -86,7 +87,7 @@ const StepGallery = forwardRef(({ productId }, ref) => {
         } else {
           message = error.message;
         }
-        alert(message);
+        toast.error(message);
         return false;
       } finally {
         setLoading(false);

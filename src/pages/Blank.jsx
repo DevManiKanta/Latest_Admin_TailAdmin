@@ -22,6 +22,7 @@
 
 
 import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 import CategoryForm from ".././components/categories/CategoryForm";
 import SubCategoryForm from ".././components/categories/SubCategoryForm";
 import useDynamicTitle from "../hooks/useDynamicTitle";
@@ -112,7 +113,7 @@ export default function Blank() {
       await api.delete(`/admin-dashboard/delete-category/${id}`);
       fetchCategories();
     } catch (e) {
-      alert(e.response?.data?.message || "Delete failed");
+      toast.error(e.response?.data?.message || "Delete failed");
     }
   };
 
@@ -127,7 +128,7 @@ export default function Blank() {
       setEditData(null);
       fetchCategories();
     } catch (e) {
-      alert(e.response?.data?.message || "Save failed");
+      toast.error(e.response?.data?.message || "Save failed");
     }
   };
 

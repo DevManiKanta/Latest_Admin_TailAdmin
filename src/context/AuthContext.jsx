@@ -49,6 +49,34 @@ export const AuthProvider = ({ children }) => {
   const login = useCallback(async (email, password) => {
     setIsLoggingIn(true);
     try {
+      // Static credentials for superadmin testing
+      const testEmail = "superadmin@gmail.com";
+      const testPassword = "123123";
+
+      // Check if it's superadmin - use static credentials
+      if (
+        email.trim().toLowerCase() === testEmail.toLowerCase() &&
+        password === testPassword
+      ) {
+        // Mock successful login response for superadmin
+        const mockUser = {
+          id: 1,
+          email: testEmail,
+          name: "Super Admin",
+          role: "superadmin",
+        };
+        const mockToken = "test_token_superadmin_" + Date.now();
+
+        setToken(mockToken);
+        localStorage.setItem(TOKEN_KEY, mockToken);
+
+        setUser(mockUser);
+        localStorage.setItem(USER_KEY, JSON.stringify(mockUser));
+
+        return { token: mockToken, user: mockUser, raw: { token: mockToken, user: mockUser } };
+      }
+
+      // For all other users, use API
       const res = await API.post("/auth/admin-login", {
         username: email,
         email,
@@ -88,16 +116,19 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem(USER_KEY);
   }, []);
 
+  const isSuperAdmin = user?.email?.toLowerCase() === "superadmin@gmail.com";
+
   const value = useMemo(
     () => ({
       token,
       user,
       isLoggingIn,
       isAuthenticated: Boolean(token),
+      isSuperAdmin,
       login,
       logout,
     }),
-    [token, user, isLoggingIn, login, logout]
+    [token, user, isLoggingIn, login, logout, isSuperAdmin]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

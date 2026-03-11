@@ -1,4 +1,5 @@
 import { useEffect, useState, forwardRef, useImperativeHandle } from "react";
+import toast from "react-hot-toast";
 import API from "../../../utils/apiInstance";
 import VariantSelect from "./VariantSelect";
 import VariantTable from "./VariantTable";
@@ -31,7 +32,7 @@ const StepVariation = forwardRef(({ productId }, ref) => {
         normalized.forEach((v) => (init[v.id] = []));
         setSelected(init);
       })
-      .catch(() => alert("Failed to load variations"));
+      .catch(() => toast.error("Failed to load variations"));
   }, []);
 
   /* ================= HANDLE SELECT ================= */
@@ -64,7 +65,7 @@ const StepVariation = forwardRef(({ productId }, ref) => {
   useImperativeHandle(ref, () => ({
     async saveStep() {
       if (!productId) {
-        alert("Product not created");
+        toast.error("Product not created");
         return false;
       }
 
@@ -108,7 +109,7 @@ const StepVariation = forwardRef(({ productId }, ref) => {
         return true;
       } catch (err) {
         console.error(err);
-        alert("Failed to save variants");
+        toast.error("Failed to save variants");
         return false;
       } finally {
         setLoading(false);

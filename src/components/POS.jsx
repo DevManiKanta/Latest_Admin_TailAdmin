@@ -1,4 +1,5 @@
 import { useEffect, useState,useRef } from "react";
+import toast from "react-hot-toast";
 import CategoryPills from "./CategoryPills";
 import ProductCard from "./ProductCard";
 import CartPanel from "./CartPanel";
@@ -118,12 +119,12 @@ const searchByBarcode = async (code) => {
 
     // 🔴 Handle barcode not found
     if (err.response?.data?.message === "Barcode not found") {
-      alert("❌ Barcode not found");
+      toast.error("Barcode not found");
       return;
     }
 
     // Other errors
-    alert("Something went wrong");
+    toast.error("Something went wrong");
     console.error(err);
   }
 };
@@ -134,7 +135,7 @@ const addVariantToCart = (product, variant) => {
 
     console.log("Variant data:", variant);
   if (variant.stock <= 0) {
-    alert("Out of stock");
+    toast.error("Out of stock");
     return;
   }
 
@@ -147,7 +148,7 @@ const addVariantToCart = (product, variant) => {
 
     if (index !== -1) {
       if (prev[index].qty >= variant.stock) {
-        alert("Stock limit reached");
+        toast.error("Stock limit reached");
         return prev;
       }
 
@@ -242,7 +243,7 @@ const handleBarcodeKeyDown = (e) => {
 
   const handleCheckout = async () => {
     if (cart.length === 0) {
-      alert("Cart is empty");
+      toast.error("Cart is empty");
       return;
     }
 
@@ -258,9 +259,9 @@ const handleBarcodeKeyDown = (e) => {
         customer_name: "Walk-in Customer",
       };
 
-      const res = await api.post("/admin-dashboard/create-order", payload);
+      await api.post("/admin-dashboard/create-order", payload);
 
-      alert("Order placed successfully ✅");
+      toast.success("Order placed successfully");
 
       // Clear cart
       setCart([]);
@@ -273,7 +274,7 @@ const handleBarcodeKeyDown = (e) => {
       setProducts(refresh.data.data);
     } catch (error) {
       console.error(error);
-      alert(error.response?.data?.message || "Order failed");
+      toast.error(error.response?.data?.message || "Order failed");
     }
   };
 
@@ -282,7 +283,7 @@ const handleBarcodeKeyDown = (e) => {
     if (!selectedProduct) return;
 
     if (variant.stock <= 0) {
-      alert("Out of stock");
+      toast.error("Out of stock");
       return;
     }
 
@@ -295,7 +296,7 @@ const handleBarcodeKeyDown = (e) => {
       // Already in cart → increase qty
       if (index !== -1) {
         if (prev[index].qty >= variant.stock) {
-          alert("Stock limit reached");
+          toast.error("Stock limit reached");
           return prev;
         }
 
@@ -324,51 +325,57 @@ const handleBarcodeKeyDown = (e) => {
   return (
     <div className="h-[calc(100vh-6rem)] flex bg-gray-100 overflow-hidden">
       {/* LEFT PANEL */}
-      <div className="flex-1 min-w-0 flex flex-col p-4 gap-4 overflow-hidden">
+      <div className="flex-1 min-w-0 flex flex-col p-6 gap-6 overflow-hidden bg-white">
         {/* CATEGORY FILTER */}
-        <CategoryPills
-          items={categories}
-          active={category}
-          onChange={setCategory}
-        />
+        <div>
+          <h3 className="text-sm font-semibold text-gray-600 mb-3">Categories</h3>
+          <CategoryPills
+            items={categories}
+            active={category}
+            onChange={setCategory}
+          />
+        </div>
 
-        <div className="flex items-center gap-3">
+        {/* SEARCH SECTION */}
+      <div className="flex items-center justify-between w-full">
           <input
             ref={barcodeInputRef}
             value={barcode}
             onChange={(e) => setBarcode(e.target.value)}
             onKeyDown={handleBarcodeKeyDown}
             placeholder="Scan barcode..."
-            className="border p-2 rounded-lg w-64"
+            className="w-40 border border-gray-300 px-2 py-1.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
             autoFocus
           />
 
           <button
             onClick={() => setOpenSearch(true)}
-            className="px-4 py-2 bg-black text-white rounded-lg"
+            className="px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium text-xs whitespace-nowrap"
           >
             🔍 Search Product
           </button>
         </div>
 
         {/* PRODUCTS GRID */}
-        <div className="grid grid-cols-[repeat(auto-fill,_minmax(100px,_1fr))]  overflow-y-auto">
-          {paginatedProducts.map((p) => (
-            <ProductCard
-              key={p.id}
-              product={p}
-              onClick={() => handleProductClick(p)}
-            />
-          ))}
+        <div className="flex-1 overflow-y-auto">
+          <div className="grid grid-cols-[repeat(auto-fill,_minmax(110px,_1fr))] gap-3">
+            {paginatedProducts.map((p) => (
+              <ProductCard
+                key={p.id}
+                product={p}
+                onClick={() => handleProductClick(p)}
+              />
+            ))}
+          </div>
         </div>
 
         {/* PAGINATION */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-2 pb-2">
+          <div className="flex items-center justify-center gap-2 pb-2 pt-6 mt-auto">
             <button
               disabled={currentPage === 1}
               onClick={() => setCurrentPage(currentPage - 1)}
-              className="px-3 py-2 border rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-200"
+              className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition font-medium text-sm"
             >
               ◀ Prev
             </button>
@@ -378,10 +385,10 @@ const handleBarcodeKeyDown = (e) => {
                 <button
                   key={i}
                   onClick={() => setCurrentPage(i + 1)}
-                  className={`px-3 py-2 rounded-lg border transition ${
+                  className={`px-3 py-2 rounded-lg border transition font-medium text-sm ${
                     currentPage === i + 1
-                      ? "bg-black text-white border-black"
-                      : "bg-white hover:bg-gray-100"
+                      ? "bg-blue-600 text-white border-blue-600"
+                      : "bg-white border-gray-300 hover:bg-gray-50"
                   }`}
                 >
                   {i + 1}
@@ -392,7 +399,7 @@ const handleBarcodeKeyDown = (e) => {
             <button
               disabled={currentPage === totalPages}
               onClick={() => setCurrentPage(currentPage + 1)}
-              className="px-3 py-2 border rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-200"
+              className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition font-medium text-sm"
             >
               Next ▶
             </button>

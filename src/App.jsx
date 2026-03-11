@@ -70,7 +70,7 @@
 
 
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router";
 
 import SignIn from "./pages/AuthPages/SignIn";
 import SignUp from "./pages/AuthPages/SignUp";
@@ -92,7 +92,6 @@ import Products from "./pages/Products/Products";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
 import CustomerCombinedReport from "./components/CustomerCombinedReport";
-import CartPanel from "./components/CartPanel";
 
 // Settings Components
 import SettingsLayout from "./pages/Settings/SettingsLayout";
@@ -115,82 +114,103 @@ import BlogCategories from "./pages/Settings/BlogCategories";
 import BlogSettings from "./pages/Settings/BlogSettings";
 import PageSettings from "./pages/Settings/PageSettings";
 import SettingsIndex from "./pages/Settings/index";
+import TabAccess from "./pages/Settings/TabAccess";
+import SuperAdminSettings from "./pages/Settings/SuperAdminSettings";
 import StaffAttendanceCalendar from "./components/StaffAttendanceCalendar";
 import POS from "./components/POS";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { useAuth } from "./context/AuthContext";
+
+function AppRoutes() {
+  const { isAuthenticated, isSuperAdmin } = useAuth();
+
+  return (
+    <Routes>
+      {/* Auth Pages - Always accessible */}
+      <Route path="/signin" element={<SignIn />} />
+      <Route path="/signup" element={<SignUp />} />
+
+      {/* Protected Dashboard Layout */}
+      <Route
+        element={
+          isAuthenticated ? <AppLayout /> : <Navigate to="/signin" replace />
+        }
+      >
+        <Route index path="/" element={<Home />} />
+
+        {/* Others Page */}
+        <Route path="/products" element={<Products />} />
+        <Route path="/profile" element={<UserProfiles />} />
+        <Route path="/calendar" element={<Calendar />} />
+        <Route path="/categories" element={<Blank />} />
+
+        {/* Forms */}
+        <Route path="/form-elements" element={<FormElements />} />
+
+        {/* Tables */}
+        <Route path="/Orders" element={<BasicTables />} />
+        <Route path="/pos-orders" element={<POS />} />
+
+        {/* Users */}
+        <Route path="/Users" element={<CustomerCombinedReport />} />
+        <Route
+          path="/StaffAttendanceCalendar"
+          element={<StaffAttendanceCalendar />}
+        />
+
+        {/* UI Elements */}
+        <Route path="/alerts" element={<Alerts />} />
+        <Route path="/avatars" element={<Avatars />} />
+        <Route path="/badge" element={<Badges />} />
+        <Route path="/buttons" element={<Buttons />} />
+        <Route path="/images" element={<Images />} />
+        <Route path="/videos" element={<Videos />} />
+
+        {/* Charts */}
+        <Route path="/bar-chart" element={<BarChart />} />
+
+        {/* Settings - Different for SuperAdmin */}
+        {isSuperAdmin ? (
+          <Route path="/Settings" element={<SuperAdminSettings />} />
+        ) : (
+          <Route element={<SettingsLayout />}>
+            <Route path="/settings" element={<SettingsIndex />} />
+            <Route path="/Settings" element={<SettingsIndex />} />
+            <Route path="/settings/profile" element={<Profile />} />
+            <Route path="/settings/logo" element={<Logo />} />
+            <Route path="/settings/social-media" element={<SocialMedia />} />
+            <Route path="/settings/payment-gateway" element={<PaymentGateway />} />
+            <Route path="/settings/variation-settings" element={<VariationSettings />} />
+            <Route path="/settings/whatsapp-integration" element={<WhatsAppIntegration />} />
+            <Route path="/settings/contact-page" element={<ContactPageSettings />} />
+            <Route path="/settings/customer-care-settings" element={<CustomerCareSettings />} />
+            <Route path="/settings/coupons-settings" element={<CouponsSettings />} />
+            <Route path="/settings/banner-settings" element={<BannerSettings />} />
+            <Route path="/settings/landing-banner-settings" element={<LandingBannerSettings />} />
+            <Route path="/settings/shipping-settings" element={<ShippingSettings />} />
+            <Route path="/settings/product-sections" element={<ProductSections />} />
+            <Route path="/settings/footer-sections" element={<FooterSections />} />
+            <Route path="/settings/footer-sections/reorder" element={<FooterSectionsReorder />} />
+            <Route path="/settings/blog-categories" element={<BlogCategories />} />
+            <Route path="/settings/blogs" element={<BlogSettings />} />
+            <Route path="/settings/pages" element={<PageSettings />} />
+            <Route path="/settings/tab-access" element={<TabAccess />} />
+          </Route>
+        )}
+      </Route>
+
+      {/* Fallback */}
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+}
 
 export default function App() {
   return (
     <>
       <Router>
         <ScrollToTop />
-
-        <Routes>
-          {/* Dashboard Layout */}
-          <Route element={<AppLayout />}>
-            <Route index path="/" element={<Home />} />
-
-            {/* Others Page */}
-            <Route path="/products" element={<Products />} />
-            <Route path="/profile" element={<UserProfiles />} />
-            <Route path="/calendar" element={<Calendar />} />
-            <Route path="/categories" element={<Blank />} />
-
-            {/* Forms */}
-            <Route path="/form-elements" element={<FormElements />} />
-
-            {/* Tables */}
-            <Route path="/Orders" element={<BasicTables />} />
-            <Route path="/pos-orders" element={<POS />} />
-
-            {/* Users */}
-            <Route path="/Users" element={<CustomerCombinedReport />} />
-            <Route
-              path="/StaffAttendanceCalendar"
-              element={<StaffAttendanceCalendar />}
-            />
-
-            {/* UI Elements */}
-            <Route path="/alerts" element={<Alerts />} />
-            <Route path="/avatars" element={<Avatars />} />
-            <Route path="/badge" element={<Badges />} />
-            <Route path="/buttons" element={<Buttons />} />
-            <Route path="/images" element={<Images />} />
-            <Route path="/videos" element={<Videos />} />
-
-            {/* Charts */}
-            <Route path="/bar-chart" element={<BarChart />} />
-
-            {/* Settings */}
-            <Route element={<SettingsLayout />}>
-              <Route path="/settings" element={<SettingsIndex />} />
-              <Route path="/Settings" element={<SettingsIndex />} />
-              <Route path="/settings/profile" element={<Profile />} />
-              <Route path="/settings/logo" element={<Logo />} />
-              <Route path="/settings/social-media" element={<SocialMedia />} />
-              <Route path="/settings/payment-gateway" element={<PaymentGateway />} />
-              <Route path="/settings/variation-settings" element={<VariationSettings />} />
-              <Route path="/settings/whatsapp-integration" element={<WhatsAppIntegration />} />
-              <Route path="/settings/contact-page" element={<ContactPageSettings />} />
-              <Route path="/settings/customer-care-settings" element={<CustomerCareSettings />} />
-              <Route path="/settings/coupons-settings" element={<CouponsSettings />} />
-              <Route path="/settings/banner-settings" element={<BannerSettings />} />
-              <Route path="/settings/landing-banner-settings" element={<LandingBannerSettings />} />
-              <Route path="/settings/shipping-settings" element={<ShippingSettings />} />
-              <Route path="/settings/product-sections" element={<ProductSections />} />
-              <Route path="/settings/footer-sections" element={<FooterSections />} />
-              <Route path="/settings/footer-sections/reorder" element={<FooterSectionsReorder />} />
-              <Route path="/settings/blog-categories" element={<BlogCategories />} />
-              <Route path="/settings/blogs" element={<BlogSettings />} />
-              <Route path="/settings/pages" element={<PageSettings />} />
-            </Route>
-          </Route>
-
-          {/* Auth Pages */}
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
-          {/* Fallback */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AppRoutes />
       </Router>
     </>
   );

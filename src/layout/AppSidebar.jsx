@@ -393,6 +393,7 @@ import {
 } from "../icons";
 
 import { useSidebar } from "../context/SidebarContext";
+import { useAuth } from "../context/AuthContext";
 import SidebarWidget from "./SidebarWidget";
 
 const navItems = [
@@ -406,11 +407,11 @@ const navItems = [
     name: "Products",
     path: "/products",
   },
-  {
-    icon: <BoxIconLine />,
-    name: "Bulk Variant Images",
-    path: "/calendar",
-  },
+  // {
+  //   icon: <BoxIconLine />,
+  //   name: "Bulk Variant Images",
+  //   path: "/calendar",
+  // },
   {
     icon: <FileIcon />,
     name: "Category",
@@ -444,18 +445,19 @@ const navItems = [
 ];
 
 const othersItems = [
-  {
-    icon: <PlugInIcon />,
-    name: "Authentication",
-    subItems: [
-      { name: "Sign In", path: "/signin", pro: false },
-      // { name: "Sign Up", path: "/signup", pro: false },
-    ],
-  },
+  // {
+  //   icon: <PlugInIcon />,
+  //   name: "Authentication",
+  //   subItems: [
+  //     // { name: "Sign In", path: "/signin", pro: false },
+  //     // { name: "Sign Up", path: "/signup", pro: false },
+  //   ],
+  // },
 ];
 
 const AppSidebar = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
+  const { isSuperAdmin } = useAuth();
   const location = useLocation();
 
   const [openSubmenu, setOpenSubmenu] = useState(null);
@@ -467,11 +469,16 @@ const AppSidebar = () => {
     [location.pathname]
   );
 
+  // Filter nav items for superadmin - only show Settings
+  const filteredNavItems = isSuperAdmin
+    ? navItems.filter((item) => item.name === "Settings")
+    : navItems;
+
   useEffect(() => {
     let submenuMatched = false;
 
     ["main", "others"].forEach((menuType) => {
-      const items = menuType === "main" ? navItems : othersItems;
+      const items = menuType === "main" ? filteredNavItems : othersItems;
 
       items.forEach((nav, index) => {
         nav.subItems?.forEach((subItem) => {
@@ -484,7 +491,7 @@ const AppSidebar = () => {
     });
 
     if (!submenuMatched) setOpenSubmenu(null);
-  }, [location, isActive]);
+  }, [location, isActive, filteredNavItems]);
 
   useEffect(() => {
     if (openSubmenu) {
@@ -508,7 +515,6 @@ const AppSidebar = () => {
       return { type: menuType, index };
     });
   };
-
   const renderMenuItems = (items, menuType) => (
     <ul className="flex flex-col gap-4">
       {items.map((nav, index) => (
@@ -624,20 +630,19 @@ const AppSidebar = () => {
       ))}
     </ul>
   );
-
   return (
     <aside
       className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-50 border-r border-gray-200
       ${
         isExpanded || isMobileOpen
-          ? "w-[290px]"
+          ? "w-[150px]"
           : isHovered
-          ? "w-[290px]"
+          ? "w-[160px]"
           : "w-[90px]"
       }
       ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
       lg:translate-x-0`}
-      onMouseEnter={() => !isExpanded && setIsHovered(true)}
+      // onMouseEnter={() => !isExpanded && setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <div
@@ -679,23 +684,23 @@ const AppSidebar = () => {
                 )}
               </h2>
 
-              {renderMenuItems(navItems, "main")}
+              {renderMenuItems(filteredNavItems, "main")}
             </div>
 
-            <div>
-              <h2 className="mb-4 text-xs uppercase text-gray-400">
-                {isExpanded || isHovered || isMobileOpen ? (
-                  "Others"
-                ) : (
-                  <HorizontaLDots />
-                )}
-              </h2>
-
-              {renderMenuItems(othersItems, "others")}
-            </div>
+            {!isSuperAdmin && (
+              <div>
+                <h2 className="mb-4 text-xs uppercase text-gray-400">
+                  {isExpanded || isHovered || isMobileOpen ? (
+                    ""
+                  ) : (
+                    <HorizontaLDots />
+                  )}
+                </h2>
+                {renderMenuItems(othersItems, "others")}
+              </div>
+            )}
           </div>
         </nav>
-
         {(isExpanded || isHovered || isMobileOpen) && <SidebarWidget />}
       </div>
     </aside>

@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from "react";
+import toast from "react-hot-toast";
 import API from "../../../utils/apiInstance";
 import RichTextEditor from "../RichTextEditor";
 
-export default function StepBasic({ setStep, setProductId }) {
+export default function StepBasic({ setStep, setProductId, productId, product, isEdit }) {
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
   const [categories, setCategories] = useState([]);
@@ -29,14 +30,37 @@ export default function StepBasic({ setStep, setProductId }) {
       try {
         const res = await API.get("/admin-dashboard/list-category-all");
         setCategories(res.data?.data || []);
+        
+        // If editing, populate form with product data
+        if (isEdit && product) {
+          setForm({
+            name: product.name || "",
+            category_id: product.category_id || "",
+            subcategory_id: product.subcategory_id || "",
+          });
+          
+          // Parse specifications if they exist
+          if (product.specifications) {
+            const specs = Object.entries(product.specifications).map(([key, value]) => ({
+              key,
+              value,
+            }));
+            setSpecifications(specs.length > 0 ? specs : [{ key: "", value: "" }]);
+          }
+          
+          // Parse extra details
+          if (product.extra_details) {
+            setDynamicData(product.extra_details);
+          }
+        }
       } catch {
-        alert("Failed to load categories");
+        toast.error("Failed to load categories");
       } finally {
         setPageLoading(false);
       }
     };
     fetchData();
-  }, []);
+  }, [isEdit, product]);
 
   const mainCategories = categories.filter(
     (c) => c.parent_id === null || c.parent_id === 0
@@ -76,7 +100,7 @@ export default function StepBasic({ setStep, setProductId }) {
 
   const handleSubmit = async () => {
     if (!form.name || !form.category_id) {
-      alert("Required fields missing");
+      toast.error("Required fields missing");
       return;
     }
 
@@ -89,16 +113,30 @@ export default function StepBasic({ setStep, setProductId }) {
 
     try {
       setLoading(true);
-      const res = await API.post("/admin-dashboard/create-product", {
-        ...form,
-        category_id: form.subcategory_id || form.category_id,
-        specifications: formattedSpecs,
-        extra_details: dynamicData,
-      });
-      setProductId(res.data?.product?.id);
+      
+      if (isEdit && productId) {
+        // Update existing product
+        await API.post(`/admin-dashboard/update-product/${productId}`, {
+          ...form,
+          category_id: form.subcategory_id || form.category_id,
+          specifications: formattedSpecs,
+          extra_details: dynamicData,
+        });
+        toast.success("Product updated");
+      } else {
+        // Create new product
+        const res = await API.post("/admin-dashboard/create-product", {
+          ...form,
+          category_id: form.subcategory_id || form.category_id,
+          specifications: formattedSpecs,
+          extra_details: dynamicData,
+        });
+        setProductId(res.data?.product?.id);
+      }
+      
       setStep(2);
     } catch {
-      alert("Something went wrong");
+      toast.error("Something went wrong");
     } finally {
       setLoading(false);
     }

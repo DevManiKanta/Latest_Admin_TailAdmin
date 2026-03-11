@@ -1,4 +1,5 @@
 import { forwardRef, useImperativeHandle, useState } from "react";
+import toast from "react-hot-toast";
 import API from "../../../utils/apiInstance";
 
 const StepTax = forwardRef(({ productId }, ref) => {
@@ -12,7 +13,7 @@ const StepTax = forwardRef(({ productId }, ref) => {
   useImperativeHandle(ref, () => ({
     async saveStep() {
       if (!productId) {
-        alert("Product ID missing");
+        toast.error("Product ID missing");
         return false;
       }
       try {
@@ -25,7 +26,7 @@ const StepTax = forwardRef(({ productId }, ref) => {
         });
         return true;
       } catch {
-        alert("Failed to save tax & affinity");
+        toast.error("Failed to save tax & affinity");
         return false;
       }
     },

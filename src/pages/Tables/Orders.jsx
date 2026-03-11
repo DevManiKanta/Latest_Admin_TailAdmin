@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import api from "../../utils/apiInstance";
 
 export default function POSOrders() {
@@ -58,10 +59,10 @@ export default function POSOrders() {
         `/admin-dashboard/shiprocket/create/${orderId}`,
       );
 
-      alert(`Shipment created!\nAWB: ${res.data.data?.awb_code || "-"}`);
+      toast.success(`Shipment created! AWB: ${res.data.data?.awb_code || "-"}`);
       loadOrders();
     } catch (err) {
-      alert(err.response?.data?.message || "Shiprocket failed");
+      toast.error(err.response?.data?.message || "Shiprocket failed");
     }
   };
 
@@ -73,7 +74,7 @@ export default function POSOrders() {
         localCourier,
       );
 
-      alert("Local courier added");
+      toast.success("Local courier added");
       setLocalOpen(false);
       setLocalCourier({
         partner: "",
@@ -83,7 +84,7 @@ export default function POSOrders() {
       });
       loadOrders(page, search);
     } catch (err) {
-      alert(err.response?.data?.message || "Failed");
+      toast.error(err.response?.data?.message || "Failed");
     }
   };
 

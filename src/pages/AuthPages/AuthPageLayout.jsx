@@ -26,7 +26,7 @@ export default function AuthLayout({
                   alt: "Logo", __self: this, __source: {fileName: _jsxFileName, lineNumber: 21}}
                 )
               )
-              , React.createElement('p', { className: "text-center text-gray-400 dark:text-white/60"  , __self: this, __source: {fileName: _jsxFileName, lineNumber: 28}}, "Free and Open-Source Tailwind CSS Admin Dashboard Template"
+              , React.createElement('p', { className: "text-center text-gray-400 dark:text-white/60"  , __self: this, __source: {fileName: _jsxFileName, lineNumber: 28}}, "Admin_Dashboard"
 
               )
             )

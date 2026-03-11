@@ -151,13 +151,13 @@ export default function ProductsTableFull({
                       <PencilIcon className="w-4 h-4" />
                       Edit
                     </button>
-                    <button
+                    {/* <button
                       type="button"
                       onClick={() => onSections(p)}
                       className="px-3 py-2 text-sm font-medium text-purple-600 hover:bg-purple-50 rounded-lg transition"
                     >
                       Sections
-                    </button>
+                    </button> */}
                     <button
                       type="button"
                       onClick={() => onDelete(p.id)}

@@ -1,4 +1,5 @@
-import { useState, useMemo } from "react";
+import React, { useState, useMemo } from "react";
+import toast from "react-hot-toast";
 import api from "../utils/apiInstance";
 
 export default function CartPanel({ cart = [], setCart }) {
@@ -153,7 +154,7 @@ export default function CartPanel({ cart = [], setCart }) {
       });
 
       if (res.data.success) {
-        alert("Payment Received");
+        toast.success("Payment Received");
 
         const orderRes = await api.post(
           "/admin-dashboard/pos/create-order",
@@ -170,44 +171,40 @@ export default function CartPanel({ cart = [], setCart }) {
           setPendingPayload(null);
         }
       } else {
-        alert("Payment not completed yet");
+        toast.error("Payment not completed yet");
       }
     } catch (err) {
-      alert("Failed to check payment");
+      toast.error("Failed to check payment");
     }
   };
 
   /* ================= SUBMIT ================= */
 
   const handleSubmit = async () => {
-    // if (!customer.name || !isValidPhone(customer.phone)) {
-    //   alert("Enter valid customer details");
-    //   return;
-    // }
     if (!customer.name) {
-      alert("Enter customer name");
+      toast.error("Enter customer name");
       return;
     }
 
     // ON CALL CUSTOMER → phone required
     if (isOnCallCustomer && !isValidPhone(customer.phone)) {
-      alert("Enter valid phone number for on-call customer");
+      toast.error("Enter valid phone number for on-call customer");
       return;
     }
 
     if (cart.length === 0) {
-      alert("Cart is empty");
+      toast.error("Cart is empty");
       return;
     }
 
     if (!isOnCallCustomer && paymentMode === "cash") {
       if (!givenAmount) {
-        alert("Enter given amount");
+        toast.error("Enter given amount");
         return;
       }
 
       if (Number(givenAmount) < total) {
-        alert("Given amount is less than total");
+        toast.error("Given amount is less than total");
         return;
       }
     }
@@ -227,7 +224,7 @@ export default function CartPanel({ cart = [], setCart }) {
 
       // ✅ FIXED VALIDATION (works for both old + new address)
       if (!addressData) {
-        alert("Please provide complete address");
+        toast.error("Please provide complete address");
         return;
       }
 
@@ -242,7 +239,7 @@ export default function CartPanel({ cart = [], setCart }) {
           !addressData.state ||
           !addressData.pincode
         ) {
-          alert("Please provide complete address");
+          toast.error("Please provide complete address");
           return;
         }
       } else {
@@ -253,7 +250,7 @@ export default function CartPanel({ cart = [], setCart }) {
           !addressData.state ||
           !addressData.pincode
         ) {
-          alert("Please provide complete address");
+          toast.error("Please provide complete address");
           return;
         }
       }
@@ -339,7 +336,7 @@ export default function CartPanel({ cart = [], setCart }) {
           );
 
           if (orderRes.data.success) {
-            alert(`Order Created: ${orderRes.data.data.invoice_number}`);
+            toast.success(`Order Created: ${orderRes.data.data.invoice_number}`);
 
             const order = orderRes.data.data;
             console.log("ORDER DETAILS:", order);
@@ -349,7 +346,7 @@ export default function CartPanel({ cart = [], setCart }) {
             setGivenAmount("");
             setBalance(0);
           } else {
-            alert(orderRes.data.message);
+            toast.error(orderRes.data.message);
           }
 
           return;
@@ -366,13 +363,13 @@ export default function CartPanel({ cart = [], setCart }) {
         );
 
         if (paymentRes.data.success) {
-          alert("Payment link sent to customer phone");
+          toast.success("Payment link sent to customer phone");
 
           setPendingPayload(payload);
           setPaymentLinkId(paymentRes.data.link_id);
           setShowPaymentDone(true);
         } else {
-          alert(paymentRes.data.message || "Failed to create payment link");
+          toast.error(paymentRes.data.message || "Failed to create payment link");
         }
       }
 
@@ -392,19 +389,19 @@ export default function CartPanel({ cart = [], setCart }) {
           setPendingId(otpRes.data.pending_id);
           setShowOtpModal(true);
            setOtp(otpRes.data.otp);
-          alert("OTP sent to WhatsApp");
+          toast.success("OTP sent to WhatsApp");
         } else {
-          alert(otpRes?.data?.message || "Unexpected response");
+          toast.error(otpRes?.data?.message || "Unexpected response");
         }
       }
     } catch (err) {
       console.log("🔥 ACTUAL ERROR:", err);
-      alert("Failed to process order");
+      toast.error("Failed to process order");
 
       console.log("🔥 FULL ERROR:", err);
       console.log("🔥 SERVER RESPONSE:", err.response?.data);
 
-      alert(
+      toast.error(
         err.response?.data?.message ||
           err.response?.data?.error ||
           "Failed to process order",
@@ -416,7 +413,7 @@ export default function CartPanel({ cart = [], setCart }) {
 
   const handleVerifyOtp = async () => {
     if (!otp) {
-      alert("Enter OTP");
+      toast.error("Enter OTP");
       return;
     }
 
@@ -444,33 +441,18 @@ export default function CartPanel({ cart = [], setCart }) {
         );
 
         if (paymentRes.data.success) {
-          alert("Payment link sent to customer phone");
+          toast.success("Payment link sent to customer phone");
 
           setPaymentLinkId(paymentRes.data.link_id);
           setShowPaymentDone(true);
 
           console.log("Payment Link:", paymentRes.data.payment_link);
         }
-
-        // const orderRes = await api.post(
-        //   "/admin-dashboard/pos/create-order",
-        //   pendingPayload,
-        // );
-
-        // if (orderRes.data.success) {
-        //   alert(`Order Created: ${orderRes.data.data.invoice_number}`);
-        //   setCart([]);
-        //   setShowOtpModal(false);
-        //   setOtp("");
-        //   setPendingPayload(null);
-        // } else {
-        //   alert(orderRes.data.message);
-        // }
       } else {
-        alert(verifyRes.data.message);
+        toast.error(verifyRes.data.message);
       }
     } catch (err) {
-      alert(err.response?.data?.message || "OTP verification failed");
+      toast.error(err.response?.data?.message || "OTP verification failed");
     } finally {
       setLoading(false);
     }
@@ -511,7 +493,7 @@ export default function CartPanel({ cart = [], setCart }) {
       );
 
       if (orderRes.data.success) {
-        alert(`Order Created: ${orderRes.data.data.invoice_number}`);
+        toast.success(`Order Created: ${orderRes.data.data.invoice_number}`);
 
         setCart([]);
         setShowOtpModal(false);
@@ -519,11 +501,11 @@ export default function CartPanel({ cart = [], setCart }) {
         setPendingPayload(null);
         setShowPaymentDone(false);
       } else {
-        alert(orderRes.data.message);
+        toast.error(orderRes.data.message);
       }
     } catch (err) {
       console.log(err.response?.data);
-      alert("Order creation failed");
+      toast.error("Order creation failed");
     } finally {
       setLoading(false);
     }
@@ -542,7 +524,7 @@ export default function CartPanel({ cart = [], setCart }) {
 
       const order = orderRes.data.data;
 
-      alert(`Order Created: ${order.invoice_number}`);
+      toast.success(`Order Created: ${order.invoice_number}`);
 
       // 🔥 PRINT RECEIPT
       printReceipt(order);
@@ -554,12 +536,12 @@ export default function CartPanel({ cart = [], setCart }) {
       setShowPaymentDone(false);
 
     } else {
-      alert(orderRes.data.message);
+      toast.error(orderRes.data.message);
     }
 
   } catch (err) {
     console.log(err.response?.data);
-    alert("Order creation failed");
+    toast.error("Order creation failed");
   } finally {
     setLoading(false);
   }
@@ -567,10 +549,10 @@ export default function CartPanel({ cart = [], setCart }) {
 
 
   return (
-    <div className="w-[420px] bg-white border-l flex flex-col h-full overflow-hidden">
+    <div className="w-[480px] bg-white border-l border-gray-200 flex flex-col h-full overflow-hidden shadow-lg">
       {/* HEADER */}
-      <div className="p-4 border-b">
-        <h3 className="text-lg font-semibold">Billing</h3>
+      <div className="p-5 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-blue-100">
+        <h3 className="text-lg font-bold text-gray-800">Billing</h3>
       </div>
 
       {/* CUSTOMER */}
@@ -913,7 +895,7 @@ export default function CartPanel({ cart = [], setCart }) {
                         !newAddress.state ||
                         newAddress.pincode.length !== 6
                       ) {
-                        alert("Please fill all address fields properly");
+                        toast.error("Please fill all address fields properly");
                         return;
                       }
 
@@ -958,12 +940,12 @@ export default function CartPanel({ cart = [], setCart }) {
                             pincode: "",
                           });
 
-                          alert("Address saved successfully");
+                          toast.success("Address saved successfully");
                         } else {
-                          alert(res.data.message);
+                          toast.error(res.data.message);
                         }
                       } catch (err) {
-                        alert(
+                        toast.error(
                           err.response?.data?.message ||
                             "Failed to save address",
                         );
@@ -982,14 +964,16 @@ export default function CartPanel({ cart = [], setCart }) {
 
             {/* ITEMS */}
       <div className="flex-1 overflow-y-auto p-4">       <div className="border border-gray-200 rounded-lg overflow-hidden">        <table className="w-full text-xs">
-          <thead className="text-gray-500">
-            <tr className="border-b border-gray-200">
-              <th className="py-2 px-2 text-left font-semibold border-r border-gray-200 last:border-r-0">Item</th>
-              <th className="py-2 px-2 text-right font-semibold border-r border-gray-200 last:border-r-0">Price</th>
-              <th className="py-2 px-2 text-right font-semibold border-r border-gray-200 last:border-r-0">Qty</th>
-              <th className="py-2 px-2 text-right font-semibold border-r border-gray-200 last:border-r-0">Total</th>
-            </tr>
-          </thead>
+         <thead className="bg-blue-50 text-gray-700 sticky top-0">
+  <tr className="border-b border-gray-300">
+    <th className="py-3 px-2 text-center font-semibold border-r border-gray-200 text-xs uppercase tracking-wide w-8">S.No</th>
+    <th className="py-3 px-2 text-left font-semibold border-r border-gray-200 text-xs uppercase tracking-wide">Item</th>
+    <th className="py-3 px-2 text-right font-semibold border-r border-gray-200 text-xs uppercase tracking-wide">Price</th>
+    <th className="py-3 px-2 text-right font-semibold border-r border-gray-200 text-xs uppercase tracking-wide">Qty</th>
+    <th className="py-3 px-2 text-right font-semibold border-r border-gray-200 text-xs uppercase tracking-wide">Total</th>
+    <th className="py-3 px-2 text-center font-semibold w-8 text-xs uppercase tracking-wide"></th>
+  </tr>
+</thead>
           <tbody>
             {cart.length === 0 && (
               <tr>
@@ -1004,6 +988,9 @@ export default function CartPanel({ cart = [], setCart }) {
                 key={`${item.product_id}-${item.variation_id}-${i}`}
                 className="border-b border-gray-200 last:border-b-0"
               >
+                <td className="py-3 px-2 text-center text-xs font-semibold text-gray-600 border-r border-gray-200">
+                  {i + 1}
+                </td>
                 <td className="py-3 px-2 border-r border-gray-200 last:border-r-0">
                   <p className="text-sm font-medium">
                     {cleanLabel(item.product_name)}
@@ -1032,8 +1019,17 @@ export default function CartPanel({ cart = [], setCart }) {
                     </button>
                   </div>
                 </td>
-                <td className="py-3 px-2 text-right font-semibold whitespace-nowrap">
+                <td className="py-3 px-2 text-right font-semibold whitespace-nowrap border-r border-gray-200">
                   ₹ {(item.price * item.qty).toFixed(2)}
+                </td>
+                <td className="py-3 px-2 text-center w-8">
+                  <button
+                    onClick={() => decreaseQty(i)}
+                    className="text-red-500 hover:text-red-700 hover:bg-red-100 p-1.5 rounded transition font-bold text-lg"
+                    title="Delete item"
+                  >
+                    ✕
+                  </button>
                 </td>
               </tr>
             ))}
@@ -1254,7 +1250,7 @@ export default function CartPanel({ cart = [], setCart }) {
                       setShowAddCustomerPopup(false);
                     }
                   } catch (err) {
-                    alert("Failed to create customer");
+                    toast.error("Failed to create customer");
                   }
                 }}
                 className="px-4 py-2 bg-green-700 text-white rounded"

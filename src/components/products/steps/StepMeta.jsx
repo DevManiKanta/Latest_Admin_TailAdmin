@@ -1,4 +1,5 @@
 import { forwardRef, useImperativeHandle, useState } from "react";
+import toast from "react-hot-toast";
 import API from "../../../utils/apiInstance";
 
 const StepMeta = forwardRef(({ productId }, ref) => {
@@ -26,7 +27,7 @@ const StepMeta = forwardRef(({ productId }, ref) => {
     async saveStep() {
       console.log("SEO saveStep called"); // 🔥 debug
       if (!productId) {
-        alert("Product ID missing");
+        toast.error("Product ID missing");
         return false;
       }
       try {
@@ -38,7 +39,7 @@ const StepMeta = forwardRef(({ productId }, ref) => {
         return true;
       } catch (err) {
         console.error(err);
-        alert("Failed to save SEO meta");
+        toast.error("Failed to save SEO meta");
         return false;
       }
     },

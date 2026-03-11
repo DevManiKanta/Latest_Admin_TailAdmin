@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import api from "../../utils/apiInstance";
 
 export default function SubCategoryForm({ category, onClose, onSaved }) {
@@ -25,7 +26,7 @@ export default function SubCategoryForm({ category, onClose, onSaved }) {
   /* SUBMIT */
   const handleSubmit = async () => {
     const clean = subCategories.filter((v) => v.trim() !== "");
-    if (!clean.length) return alert("Enter at least one sub category");
+    if (!clean.length) return toast.error("Enter at least one sub category");
 
     try {
       setLoading(true);
@@ -38,7 +39,7 @@ export default function SubCategoryForm({ category, onClose, onSaved }) {
       onSaved();
       onClose();
     } catch (e) {
-      alert(e.response?.data?.message || "Failed to add sub categories");
+      toast.error(e.response?.data?.message || "Failed to add sub categories");
     } finally {
       setLoading(false);
     }

@@ -168,7 +168,7 @@ export default function Products() {
   return (
     <div className="space-y-6">
       <PageMeta
-        title="Products | TailAdmin - Admin Dashboard"
+        title="Admin"
         description="Manage your products efficiently"
       />
 
@@ -334,27 +334,29 @@ export default function Products() {
         }}
       />
 
-      {/* SECTIONS DRAWER */}
-      {openSections && (
-        <>
-          <div
-            className="fixed inset-0 bg-black/40 z-40 backdrop-blur-sm"
-            onClick={() => setOpenSections(false)}
-          />
-          <div className="fixed right-0 top-0 h-full w-[450px] bg-white shadow-2xl z-50 p-6 overflow-y-auto transition-all duration-300">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-semibold text-gray-900">Assign Sections</h2>
-              <button
-                onClick={() => setOpenSections(false)}
-                className="text-gray-500 hover:text-gray-800 text-2xl transition"
-              >
-                ✕
-              </button>
-            </div>
-            {/* Add ProductSectionAssign component here */}
-          </div>
-        </>
-      )}
+    
     </div>
   );
 }
+
+
+  // {openSections && (
+  //       <>
+  //         <div
+  //           className="fixed inset-0 bg-black/40 z-40 backdrop-blur-sm"
+  //           onClick={() => setOpenSections(false)}
+  //         />
+  //         <div className="fixed right-0 top-0 h-full w-[450px] bg-white shadow-2xl z-50 p-6 overflow-y-auto transition-all duration-300">
+  //           <div className="flex justify-between items-center mb-6">
+  //             <h2 className="text-xl font-semibold text-gray-900">Assign Sections</h2>
+  //             <button
+  //               onClick={() => setOpenSections(false)}
+  //               className="text-gray-500 hover:text-gray-800 text-2xl transition"
+  //             >
+  //               ✕
+  //             </button>
+  //           </div>
+  //           {/* Add ProductSectionAssign component here */}
+  //         </div>
+  //       </>
+  //     )}

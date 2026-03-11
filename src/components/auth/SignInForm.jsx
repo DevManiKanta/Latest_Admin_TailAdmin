@@ -22,11 +22,10 @@ export default function SignInForm() {
   }, [location.state]);
 
   useEffect(() => {
-    const hasRedirectTarget = Boolean(location.state?.from);
-    if (isAuthenticated && hasRedirectTarget) {
-      navigate(redirectTo, { replace: true });
+    if (isAuthenticated) {
+      navigate("/", { replace: true });
     }
-  }, [isAuthenticated, location.state, navigate, redirectTo]);
+  }, [isAuthenticated, navigate]);
 
   const onChangeField = (event) => {
     const { name, value } = event.target;
@@ -126,7 +125,7 @@ export default function SignInForm() {
 
     try {
       await login(formState.email.trim(), formState.password);
-      navigate(redirectTo, { replace: true });
+      navigate("/", { replace: true });
     } catch (error) {
       applyFieldErrors(error);
       setFormError(normalizeErrorMessage(error));
