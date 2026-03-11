@@ -10,19 +10,22 @@ import { ThemeProvider } from "./context/ThemeContext.jsx";
 import { AppSettingsProvider } from "./context/AppSettingsContext.jsx";
 import { ProfileProvider } from "./context/ProfileContext.jsx";
 import { LogoSettingsProvider } from "./context/LogoSettingsContext.jsx";
+import { AuthProvider } from "./context/AuthContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AppSettingsProvider>
       <ThemeProvider>
-        <ProfileProvider>
-          <LogoSettingsProvider>
-            <AppWrapper>
-              <Toaster position="top-right" />
-              <App />
-            </AppWrapper>
-          </LogoSettingsProvider>
-        </ProfileProvider>
+        <AuthProvider>
+          <ProfileProvider>
+            <LogoSettingsProvider>
+              <AppWrapper>
+                <Toaster position="top-right" />
+                <App />
+              </AppWrapper>
+            </LogoSettingsProvider>
+          </ProfileProvider>
+        </AuthProvider>
       </ThemeProvider>
     </AppSettingsProvider>
   </StrictMode>

@@ -59,9 +59,15 @@ export default function Blank() {
       const res = await api.get("/admin-dashboard/list-category", {
         params: { search, page, perPage },
       });
-      setCategories(res.data.data);
-      setTotalPages(res.data.pagination.totalPages);
+      const data = res?.data?.data;
+      const pagination = res?.data?.pagination;
+      setCategories(Array.isArray(data) ? data : []);
+      setTotalPages(
+        typeof pagination?.totalPages === "number" ? pagination.totalPages : 1
+      );
     } catch (e) {
+      setCategories([]);
+      setTotalPages(1);
     } finally {
       setLoading(false);
     }
@@ -71,6 +77,8 @@ export default function Blank() {
     fetchCategories();
   }, [search, page, perPage]);
 
+  const safeCategories = Array.isArray(categories) ? categories : [];
+
   /* ================= AUTO SUGGEST ================= */
   useEffect(() => {
     if (!parentSearch.trim()) {
@@ -78,7 +86,7 @@ export default function Blank() {
       return;
     }
 
-    const parents = categories.filter(
+    const parents = safeCategories.filter(
       (c) =>
         !c.parent_id &&
         c.name.toLowerCase().includes(parentSearch.toLowerCase()),
@@ -130,10 +138,10 @@ export default function Blank() {
 
   /* ================= FILTER RESULT ================= */
   const displayedCategories = selectedParent
-    ? categories.filter(
+    ? safeCategories.filter(
         (c) => c.id === selectedParent.id || c.parent_id === selectedParent.id,
       )
-    : categories;
+    : safeCategories;
 
   /* ================= UI ================= */
   return (

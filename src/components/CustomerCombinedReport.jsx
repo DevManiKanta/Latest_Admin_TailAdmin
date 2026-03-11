@@ -18,9 +18,13 @@ export default function CustomerCombinedReport() {
   const fetchCustomers = async (pageNo) => {
     setLoading(true);
     try {
-      const res = await api.get(`/admin-dashboard/user-details?page=${pageNo}`);
-      setCustomers(res.data.data);
-      setMeta(res.data.meta);
+      const res = await api.get(
+        `/admin-dashboard/user-details?page=${pageNo}`
+      );
+      const data = res?.data?.data;
+      const metaData = res?.data?.meta;
+      setCustomers(Array.isArray(data) ? data : []);
+      setMeta(metaData && typeof metaData === "object" ? metaData : {});
     } catch (error) {
       setCustomers([]);
       setMeta({});
@@ -30,6 +34,10 @@ export default function CustomerCombinedReport() {
   };
 
   /* ================= UI ================= */
+  const currentPage = meta?.current_page ?? 1;
+  const perPage = meta?.per_page ?? 0;
+  const lastPage = meta?.last_page ?? 1;
+
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-semibold">Customer Report</h1>
@@ -61,11 +69,11 @@ export default function CustomerCombinedReport() {
               )}
 
               {customers.map((c, i) => (
-                <>
+                <span key={c?.id ?? c?._id ?? i} className="contents">
                   {/* MAIN ROW */}
-                  <tr key={i} className="border-t hover:bg-gray-50">
+                  <tr className="border-t hover:bg-gray-50">
                     <td className="px-4 py-3">
-                      {(meta.current_page - 1) * meta.per_page + i + 1}
+                      {(currentPage - 1) * perPage + i + 1}
                     </td>
                     <td className="px-4 py-3 font-medium">{c.name}</td>
                     <td className="px-4 py-3">{c.email}</td>
@@ -119,7 +127,7 @@ export default function CustomerCombinedReport() {
                       </td>
                     </tr>
                   )}
-                </>
+                </span>
               ))}
             </tbody>
           </table>
@@ -129,12 +137,12 @@ export default function CustomerCombinedReport() {
       {/* PAGINATION */}
       <div className="flex justify-between items-center">
         <p className="text-sm text-gray-500">
-          Page {meta.current_page} of {meta.last_page}
+          Page {currentPage} of {lastPage}
         </p>
 
         <div className="space-x-2">
           <button
-            disabled={meta.current_page === 1}
+            disabled={currentPage === 1}
             onClick={() => setPage(page - 1)}
             className="px-3 py-1 border rounded disabled:opacity-40"
           >
@@ -142,7 +150,7 @@ export default function CustomerCombinedReport() {
           </button>
 
           <button
-            disabled={meta.current_page === meta.last_page}
+            disabled={currentPage === lastPage}
             onClick={() => setPage(page + 1)}
             className="px-3 py-1 border rounded disabled:opacity-40"
           >

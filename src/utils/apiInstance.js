@@ -1,13 +1,14 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://192.168.1.9:8000/api/",
+  // baseURL: "http://192.168.1.9:8000/api/",
+  // baseURL: "https://unprojecting-deposable-carey.ngrok-free.dev/api/",
+   baseURL: "https://api-herbal.easybizcart.com/public/api",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
   },
 });
-
 // request interceptor
 API.interceptors.request.use(
   (config) => {

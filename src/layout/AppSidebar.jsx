@@ -418,6 +418,11 @@ const navItems = [
   },
   {
     icon: <BoxCubeIcon />,
+    name: "PosOrders",
+    path: "/pos-orders",
+  },
+  {
+    icon: <BoxCubeIcon />,
     name: "Orders",
     path: "/Orders",
   },
@@ -429,7 +434,7 @@ const navItems = [
   {
     icon: <UserIcon />,
     name: "Staff Attendance",
-    path: "/alerts",
+    path: "/StaffAttendanceCalendar",
   },
   {
     icon: <PlugInIcon />,
@@ -444,7 +449,7 @@ const othersItems = [
     name: "Authentication",
     subItems: [
       { name: "Sign In", path: "/signin", pro: false },
-      { name: "Sign Up", path: "/signup", pro: false },
+      // { name: "Sign Up", path: "/signup", pro: false },
     ],
   },
 ];

@@ -92,6 +92,7 @@ import Products from "./pages/Products/Products";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
 import CustomerCombinedReport from "./components/CustomerCombinedReport";
+import CartPanel from "./components/CartPanel";
 
 // Settings Components
 import SettingsLayout from "./pages/Settings/SettingsLayout";
@@ -114,6 +115,8 @@ import BlogCategories from "./pages/Settings/BlogCategories";
 import BlogSettings from "./pages/Settings/BlogSettings";
 import PageSettings from "./pages/Settings/PageSettings";
 import SettingsIndex from "./pages/Settings/index";
+import StaffAttendanceCalendar from "./components/StaffAttendanceCalendar";
+import POS from "./components/POS";
 
 export default function App() {
   return (
@@ -137,9 +140,14 @@ export default function App() {
 
             {/* Tables */}
             <Route path="/Orders" element={<BasicTables />} />
+            <Route path="/pos-orders" element={<POS />} />
 
             {/* Users */}
             <Route path="/Users" element={<CustomerCombinedReport />} />
+            <Route
+              path="/StaffAttendanceCalendar"
+              element={<StaffAttendanceCalendar />}
+            />
 
             {/* UI Elements */}
             <Route path="/alerts" element={<Alerts />} />
@@ -180,7 +188,6 @@ export default function App() {
           {/* Auth Pages */}
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
-
           {/* Fallback */}
           <Route path="*" element={<NotFound />} />
         </Routes>
