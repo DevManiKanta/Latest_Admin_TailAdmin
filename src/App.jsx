@@ -89,6 +89,8 @@ import FormElements from "./pages/Forms/FormElements";
 import Blank from "./pages/Blank";
 import AppLayout from "./layout/AppLayout";
 import Products from "./pages/Products/Products";
+import AddProductPage from "./pages/Products/AddProductPage";
+import EditProductPage from "./pages/Products/EditProductPage";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
 import CustomerCombinedReport from "./components/CustomerCombinedReport";
@@ -140,6 +142,8 @@ function AppRoutes() {
 
         {/* Others Page */}
         <Route path="/products" element={<Products />} />
+        <Route path="/products/add" element={<AddProductPage />} />
+        <Route path="/products/edit/:productId" element={<EditProductPage />} />
         <Route path="/profile" element={<UserProfiles />} />
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/categories" element={<Blank />} />

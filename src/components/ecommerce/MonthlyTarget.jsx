@@ -72,7 +72,7 @@ export default function MonthlyTarget() {
             , React.createElement('h3', { className: "text-lg font-semibold text-gray-800 dark:text-white/90"   , __self: this, __source: {fileName: _jsxFileName, lineNumber: 71}}, "Monthly Target"
 
             )
-            , React.createElement('p', { className: "mt-1 text-gray-500 text-theme-sm dark:text-gray-400"   , __self: this, __source: {fileName: _jsxFileName, lineNumber: 74}}, "dd"
+            , React.createElement('p', { className: "mt-1 text-gray-500 text-theme-sm dark:text-gray-400"   , __self: this, __source: {fileName: _jsxFileName, lineNumber: 74}},
 
             )
           )

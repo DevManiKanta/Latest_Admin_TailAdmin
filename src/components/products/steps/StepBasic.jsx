@@ -146,38 +146,44 @@ export default function StepBasic({ setStep, setProductId, productId, product, i
     return <div className="py-12 text-center">Loading...</div>;
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-      {/* ================= ROW 1 ================= */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
-        <div>
-          <label className="text-sm font-medium text-gray-700">
-            Product Name
-          </label>
-          <input
-            className="input mt-1"
-            value={form.name}
-            onChange={(e) => handleChange("name", e.target.value)}
-          />
-        </div>
-        <SearchableSelect
-          label="Category"
-          options={mainCategories}
-          value={form.category_id}
-          onChange={(id) => handleChange("category_id", id)}
-          placeholder="Select category"
-        />
-        {form.category_id && subCategories.length > 0 ? (
-          <SearchableSelect
-            label="Sub Category"
-            options={subCategories}
-            value={form.subcategory_id}
-            onChange={(id) => handleChange("subcategory_id", id)}
-            placeholder="Select sub category"
-          />
-        ) : (
-          <div />
-        )}
-      </div>
+    <div className="bg-white rounded-xl border shadow-sm p-6">
+
+   <div className="grid grid-cols-3 gap-4 mb-6">
+  <div>
+    <label className="text-sm font-medium text-gray-700">
+      Product Name
+    </label>
+    <input
+      className="mt-1 w-full px-3 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+      value={form.name}
+      onChange={(e) => handleChange("name", e.target.value)}
+    />
+  </div>
+
+  <div className="mt-1 border border-gray-200 rounded-md">
+    <SearchableSelect
+      label="Category"
+      options={mainCategories}
+      value={form.category_id}
+      onChange={(id) => handleChange("category_id", id)}
+      placeholder="Select category"
+    />
+  </div>
+
+  {form.category_id && subCategories.length > 0 ? (
+    <div className="mt-1 border border-gray-200 rounded-md">
+      <SearchableSelect
+        label="Sub Category"
+        options={subCategories}
+        value={form.subcategory_id}
+        onChange={(id) => handleChange("subcategory_id", id)}
+        placeholder="Select sub category"
+      />
+    </div>
+  ) : (
+    <div />
+  )}
+</div>
 
       {/* ================= ROW 2 ================= */}
       <div className="border border-gray-200 rounded-xl bg-gray-50 p-5">

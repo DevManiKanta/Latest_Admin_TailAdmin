@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import API from "../../utils/apiInstance";
-import AddProductDrawer from "../../components/AddProductDrawer";
-import EditProductDrawer from "../../components/EditProductDrawer";
 import ProductsTableFull from "../../components/products/ProductsTableFull";
 import BulkImportModals from "../../components/products/BulkImportModals";
 import PageMeta from "../../components/common/PageMeta";
@@ -10,6 +9,7 @@ import toast from "react-hot-toast";
 
 export default function Products() {
   useDynamicTitle("Products");
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
@@ -19,9 +19,6 @@ export default function Products() {
   const [products, setProducts] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [openAdd, setOpenAdd] = useState(false);
-  const [openEdit, setOpenEdit] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
 
   // Bulk Import States
   const [showBulkModal, setShowBulkModal] = useState(false);
@@ -172,17 +169,6 @@ export default function Products() {
         description="Manage your products efficiently"
       />
 
-      {/* HEADER SECTION */}
-      {/* <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 rounded-3xl p-8 text-white overflow-hidden relative">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500 rounded-full blur-3xl"></div>
-        </div>
-        <div className="relative z-10">
-          <h1 className="text-4xl font-bold mb-2">Products</h1>
-          <p className="text-slate-300">Manage and organize your product catalog</p>
-        </div>
-      </div> */}
-
       {/* SEARCH & ACTION BUTTONS */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
         <div className="lg:col-span-2">
@@ -232,7 +218,7 @@ export default function Products() {
         </button>
         <div className="flex gap-3">
           <button
-            onClick={() => setOpenAdd(true)}
+            onClick={() => navigate("/products/add")}
             className="flex-1 h-12 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-medium transition transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
           >
             <svg
@@ -277,8 +263,7 @@ export default function Products() {
         products={products}
         loading={loading}
         onEdit={(product) => {
-          setSelectedProduct(product);
-          setOpenEdit(true);
+          navigate(`/products/edit/${product.id}`, { state: { product } });
         }}
         onDelete={handleDelete}
         onSections={(product) => {
@@ -314,49 +299,6 @@ export default function Products() {
         onDownloadSampleData={handleDownloadSampleData}
         onBulkUpload={handleBulkUpload}
       />
-
-      {/* DRAWERS */}
-      <AddProductDrawer
-        open={openAdd}
-        onClose={() => {
-          setOpenAdd(false);
-          fetchProducts();
-        }}
-      />
-      <EditProductDrawer
-        open={openEdit}
-        product={selectedProduct}
-        productId={selectedProduct?.id}
-        onClose={() => {
-          setOpenEdit(false);
-          setSelectedProduct(null);
-          fetchProducts();
-        }}
-      />
-
-    
     </div>
   );
 }
-
-
-  // {openSections && (
-  //       <>
-  //         <div
-  //           className="fixed inset-0 bg-black/40 z-40 backdrop-blur-sm"
-  //           onClick={() => setOpenSections(false)}
-  //         />
-  //         <div className="fixed right-0 top-0 h-full w-[450px] bg-white shadow-2xl z-50 p-6 overflow-y-auto transition-all duration-300">
-  //           <div className="flex justify-between items-center mb-6">
-  //             <h2 className="text-xl font-semibold text-gray-900">Assign Sections</h2>
-  //             <button
-  //               onClick={() => setOpenSections(false)}
-  //               className="text-gray-500 hover:text-gray-800 text-2xl transition"
-  //             >
-  //               ✕
-  //             </button>
-  //           </div>
-  //           {/* Add ProductSectionAssign component here */}
-  //         </div>
-  //       </>
-  //     )}
