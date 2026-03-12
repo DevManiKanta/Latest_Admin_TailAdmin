@@ -214,69 +214,72 @@ export default function WhatsAppIntegration() {
             )}
           </div>
 
-          {/* API Key Field */}
-          <div className="space-y-3">
-            <label className="block">
-              <span className="text-base font-semibold text-gray-900">
-                API Key
-              </span>
-              <span className="text-red-500 ml-1">*</span>
-              <p className="text-sm text-gray-600 mt-1">
-                Your WhatsApp API authentication key
-              </p>
-            </label>
-            {editMode ? (
-              <div className="relative">
-                <input
-                  type={showKey ? "text" : "password"}
-                  value={apiKey}
-                  onChange={(e) => setApiKey(e.target.value)}
-                  placeholder="Enter your API Key"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition pr-12"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowKey(!showKey)}
-                  className="absolute right-4 top-3.5 text-gray-500 hover:text-gray-700 transition"
-                >
-                  {showKey ? <EyeOff size={20} /> : <Eye size={20} />}
-                </button>
-              </div>
-            ) : (
-              <div className="px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg">
-                <p className="text-sm text-gray-600 font-mono">
-                  {apiKey ? "••••••••••••••••" : "Not configured"}
+          {/* API Key & Base URL Fields - Side by Side */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* API Key Field */}
+            <div className="space-y-3">
+              <label className="block">
+                <span className="text-base font-semibold text-gray-900">
+                  API Key
+                </span>
+                <span className="text-red-500 ml-1">*</span>
+                <p className="text-sm text-gray-600 mt-1">
+                  Your WhatsApp API authentication key
                 </p>
-              </div>
-            )}
-          </div>
+              </label>
+              {editMode ? (
+                <div className="relative">
+                  <input
+                    type={showKey ? "text" : "password"}
+                    value={apiKey}
+                    onChange={(e) => setApiKey(e.target.value)}
+                    placeholder="Enter your API Key"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition pr-12"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowKey(!showKey)}
+                    className="absolute right-4 top-3.5 text-gray-500 hover:text-gray-700 transition"
+                  >
+                    {showKey ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
+                </div>
+              ) : (
+                <div className="px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg">
+                  <p className="text-sm text-gray-600 font-mono">
+                    {apiKey ? "••••••••••••••••" : "Not configured"}
+                  </p>
+                </div>
+              )}
+            </div>
 
-          {/* Base URL Field */}
-          <div className="space-y-3">
-            <label className="block">
-              <span className="text-base font-semibold text-gray-900">
-                Base URL
-              </span>
-              <span className="text-red-500 ml-1">*</span>
-              <p className="text-sm text-gray-600 mt-1">
-                Your WhatsApp API endpoint URL
-              </p>
-            </label>
-            {editMode ? (
-              <input
-                type="url"
-                value={baseUrl}
-                onChange={(e) => setBaseUrl(e.target.value)}
-                placeholder="https://api.whatsapp.com"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
-              />
-            ) : (
-              <div className="px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg">
-                <p className="text-sm text-gray-600 break-all">
-                  {baseUrl || "Not configured"}
+            {/* Base URL Field */}
+            <div className="space-y-3">
+              <label className="block">
+                <span className="text-base font-semibold text-gray-900">
+                  Base URL
+                </span>
+                <span className="text-red-500 ml-1">*</span>
+                <p className="text-sm text-gray-600 mt-1">
+                  Your WhatsApp API endpoint URL
                 </p>
-              </div>
-            )}
+              </label>
+              {editMode ? (
+                <input
+                  type="url"
+                  value={baseUrl}
+                  onChange={(e) => setBaseUrl(e.target.value)}
+                  placeholder="https://api.whatsapp.com"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                />
+              ) : (
+                <div className="px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg">
+                  <p className="text-sm text-gray-600 break-all">
+                    {baseUrl || "Not configured"}
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Info Box */}

@@ -564,47 +564,26 @@ export default function StaffAttendanceCalendar() {
           </div>
 
           {/* PAYROLL SUMMARY */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 animate-fade-in">
+          <div className="flex gap-2 overflow-x-auto pb-2">
             {[
-              { label: "Total Days", value: daysInMonth, color: "bg-blue-50 text-blue-700" },
-              { label: "Present", value: summary.present, color: "bg-green-50 text-green-700" },
-              { label: "Absent", value: summary.absent, color: "bg-red-50 text-red-700" },
-              { label: "Leave", value: summary.leave, color: "bg-yellow-50 text-yellow-700" },
-              { label: "OT Days", value: summary.ot, color: "bg-purple-50 text-purple-700" },
+              { label: "Total Days", value: daysInMonth, color: "bg-blue-50" },
+              { label: "Present", value: summary.present, color: "bg-green-50" },
+              { label: "Absent", value: summary.absent, color: "bg-red-50" },
+              { label: "Leave", value: summary.leave, color: "bg-yellow-50" },
+              { label: "OT Days", value: summary.ot, color: "bg-purple-50" },
+              { label: "Monthly Salary", value: `₹${monthlySalary}`, color: "bg-blue-100" },
+              { label: "Deduction", value: `₹${deduction.toFixed(2)}`, color: "bg-red-100" },
+              { label: "OT Amount", value: `₹${totalOTAmount.toFixed(2)}`, color: "bg-purple-100" },
+              { label: "Final Payable", value: `₹${finalAmount.toFixed(2)}`, color: "bg-green-100" },
             ].map((item, idx) => (
               <div
                 key={idx}
-                className={`${item.color} rounded-2xl p-4 animate-fade-in`}
-                style={{ animationDelay: `${idx * 50}ms` }}
+                className={`${item.color} rounded-lg p-2 min-w-max`}
               >
-                <p className="text-xs font-medium opacity-75 mb-1">{item.label}</p>
-                <p className="text-2xl font-bold">{item.value}</p>
+                <p className="text-xs text-gray-600 mb-1">{item.label}</p>
+                <p className="text-lg font-bold text-gray-900">{item.value}</p>
               </div>
             ))}
-          </div>
-
-          {/* FINANCIAL SUMMARY */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 animate-fade-in">
-            {[
-              { label: "Monthly Salary", value: `₹${monthlySalary}`, color: "bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200" },
-              { label: "Deduction", value: `₹${deduction.toFixed(2)}`, color: "bg-gradient-to-br from-red-50 to-red-100 border-red-200" },
-              { label: "OT Amount", value: `₹${totalOTAmount.toFixed(2)}`, color: "bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200" },
-            ].map((item, idx) => (
-              <div
-                key={idx}
-                className={`${item.color} border rounded-2xl p-6 animate-fade-in`}
-                style={{ animationDelay: `${(idx + 5) * 50}ms` }}
-              >
-                <p className="text-sm font-medium text-gray-600 mb-2">{item.label}</p>
-                <p className="text-3xl font-bold text-gray-900">{item.value}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* FINAL PAYABLE */}
-          <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6 animate-fade-in">
-            <p className="text-sm font-medium text-gray-600 mb-2">Final Payable Amount</p>
-            <p className="text-4xl font-bold text-green-700">₹{finalAmount.toFixed(2)}</p>
           </div>
 
           {/* CALENDAR */}

@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 export default function CategoryPills({ items, active, onChange }) {
   const [currentPage, setCurrentPage] = useState(0);
   const containerRef = useRef(null);
-  const itemsPerPage = 6;
+  const itemsPerPage = 7;
 
   const itemsArray = items || [];
   const totalPages = Math.ceil(itemsArray.length / itemsPerPage);
@@ -50,7 +50,7 @@ export default function CategoryPills({ items, active, onChange }) {
                 onClick={() => onChange(item.id)}
                 className={`
                   flex flex-col items-center justify-center
-                  w-[100px] h-[120px]
+                  w-[95px] h-[120px]
                   px-2 py-3
                   rounded-xl border-2 transition flex-shrink-0
                   ${
@@ -90,8 +90,6 @@ export default function CategoryPills({ items, active, onChange }) {
             );
           })}
         </div>
-
-        {/* RIGHT ARROW */}
         <button
           onClick={handleNext}
           disabled={!canGoNext}
@@ -103,7 +101,7 @@ export default function CategoryPills({ items, active, onChange }) {
 
       {/* BULLET INDICATORS */}
       {totalPages > 1 && (
-        <div className="flex justify-center gap-2">
+        <div className="flex justify-center gap-0.5">
           {Array.from({ length: totalPages }).map((_, i) => (
             <button
               key={i}

@@ -344,7 +344,7 @@ const handleBarcodeKeyDown = (e) => {
             onChange={(e) => setBarcode(e.target.value)}
             onKeyDown={handleBarcodeKeyDown}
             placeholder="Scan barcode..."
-            className="w-40 border border-gray-300 px-2 py-1.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
+            className="w-70 border border-gray-300 px-2 py-1.5 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-xs"
             autoFocus
           />
 

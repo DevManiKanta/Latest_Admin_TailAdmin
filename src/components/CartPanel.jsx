@@ -546,15 +546,12 @@ export default function CartPanel({ cart = [], setCart }) {
     setLoading(false);
   }
 };
-
-
   return (
     <div className="w-[480px] bg-white border-l border-gray-200 flex flex-col h-full overflow-hidden shadow-lg">
       {/* HEADER */}
-      <div className="p-5 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-blue-100">
-        <h3 className="text-lg font-bold text-gray-800">Billing</h3>
-      </div>
-
+    <div className="py-2 px-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-blue-100">
+  <h3 className="text-lg font-bold text-gray-800">Billing</h3>
+</div>
       {/* CUSTOMER */}
       <div className="p-4 border-b space-y-3">
         <div className="grid grid-cols-2 gap-2">
@@ -683,7 +680,14 @@ export default function CartPanel({ cart = [], setCart }) {
 
         <div className="flex items-center justify-between border rounded-lg px-3 py-2">
           <span className="text-xs font-semibold text-gray-600">
-            Customer Type
+            {orderHistory.length > 0 && (
+          <button
+            onClick={() => setShowOrderHistory(true)}
+            className="text-sm text-blue-600 underline"
+          >
+            View Purchase History ({orderHistory.length})
+          </button>
+        )}
           </span>
           <button
             type="button"
@@ -703,15 +707,6 @@ export default function CartPanel({ cart = [], setCart }) {
             {isOnCallCustomer ? "On Call Customer" : "Normal Customer"}
           </button>
         </div>
-        {orderHistory.length > 0 && (
-          <button
-            onClick={() => setShowOrderHistory(true)}
-            className="text-sm text-blue-600 underline"
-          >
-            View Purchase History ({orderHistory.length})
-          </button>
-        )}
-
         {/* ADDRESS UI */}
         {selectedCustomer && isOnCallCustomer && (
           <div className="mt-3 space-y-3">
@@ -1036,13 +1031,11 @@ export default function CartPanel({ cart = [], setCart }) {
           </tbody>
         </table>        </div>      </div>     {/* SUMMARY */}
       <div className="border-t p-4 space-y-3 text-sm">
-        <Row label="Subtotal" value={`₹ ${subtotal.toFixed(2)}`} />
-
         <div className="grid grid-cols-3 gap-2 items-end">
           <div className="space-y-1">
-            <span className="text-xs text-gray-500">Discount</span>
             <input
               type="number"
+              placeholder="Discount"
               min={0}
               value={discount}
               onChange={(e) => setDiscount(Number(e.target.value))}
@@ -1051,8 +1044,9 @@ export default function CartPanel({ cart = [], setCart }) {
           </div>
 
           <div className="space-y-1 text-right">
-            <span className="text-xs text-gray-500">GST</span>
-            <div className="font-semibold">₹ {gst.toFixed(2)}</div>
+            <span className="text-xs text-gray-500">Subtotal</span>
+            {/* <div className="font-semibold">₹ {gst.toFixed(2)}</div> */}
+              <Row value={`₹ ${subtotal.toFixed(2)}`} />
           </div>
 
           <div className="space-y-1 text-right">

@@ -163,27 +163,26 @@ export default function Profile() {
       <hr />
 
       {/* PROFILE INFO */}
-      <div className="space-y-5 text-sm">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
         {["name", "email", "phone"].map((field) => (
           <div key={field}>
-            <p className="font-medium capitalize">{field}</p>
+            <p className="font-medium capitalize mb-2">{field}</p>
             {editMode ? (
               <input
                 name={field}
                 value={form[field]}
                 onChange={handleChange}
-                className="mt-1 w-full border rounded-lg px-3 py-2"
+                className="w-full border rounded-lg px-3 py-2"
               />
             ) : (
               <p className="text-gray-500">{form[field]}</p>
             )}
-            <hr />
           </div>
         ))}
 
         {/* PASSWORD */}
         <div>
-          <p className="font-medium">Password</p>
+          <p className="font-medium mb-2">Password</p>
           {editMode ? (
             <input
               type="password"
@@ -191,7 +190,7 @@ export default function Profile() {
               value={form.password}
               onChange={handleChange}
               placeholder="New password"
-              className="mt-1 w-full border rounded-lg px-3 py-2"
+              className="w-full border rounded-lg px-3 py-2"
             />
           ) : (
             <p className="text-gray-500">••••••••</p>
